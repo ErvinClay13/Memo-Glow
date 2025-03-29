@@ -1,0 +1,109 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+    <div id="container">
+        <div id="card"></div>
+        <div id="card2" style="display: none;"></div>
+        <div id="card3" style="display: none;"></div>
+        <div id="card4" style="display: none;"></div>
+    </div>
+
+    <div class="footer">
+        <button id="cardBtn">New Card</button>
+        <button id="cardBtn2" style="display: none;">New Card</button>
+        <button id="cardBtn3" style="display: none;">New Card</button>
+        
+    </div>
+    
+
+
+
+
+    <div id="container"></div>
+
+    <div class="footer">
+        <button id="addCardBtn"> New Note</button>
+    </div>
+</body>
+<script src="script.js"></script>
+</html> -->
+
+
+
+
+
+let cardCount = 0;
+const container = document.getElementById('container');
+const addCardBtn = document.getElementById('addCardBtn');
+const noteList = document.getElementById('noteList');
+
+const colors = [
+    '#ccff00',
+    'rgb(187, 13, 250)',
+    'rgb(0, 149, 255)',
+    'rgb(255, 0, 234)'
+];
+
+addCardBtn.addEventListener("click", () => {
+    if (cardCount >= colors.length) {
+        alert("Max number of cards reached!");
+        return;
+    }
+
+    const userText = prompt("Enter your card text:");
+    if (!userText) return;
+
+    // Create card
+    const card = document.createElement("div");
+    card.classList.add("card");
+    card.style.backgroundColor = colors[cardCount];
+    card.style.boxShadow = `10px 10px 40px ${colors[cardCount]}`;
+    card.style.top = `${100 + cardCount * 30}px`;
+    card.style.left = `${300 + cardCount * 30}px`; // offset from sidebar
+
+    const para = document.createElement("p");
+    para.innerText = userText;
+    card.appendChild(para);
+
+    const closeBtn = document.createElement("button");
+    closeBtn.innerText = "✕";
+    closeBtn.classList.add("close-btn");
+
+    // Card and list item delete logic
+    const listItem = document.createElement("li");
+    listItem.classList.add("note-item");
+
+    const noteText = document.createElement("span");
+    noteText.innerText = userText;
+
+    const deleteNoteBtn = document.createElement("button");
+    deleteNoteBtn.innerText = "✕";
+    deleteNoteBtn.classList.add("note-delete");
+
+    deleteNoteBtn.addEventListener("click", () => {
+        container.removeChild(card);
+        noteList.removeChild(listItem);
+        cardCount--;
+    });
+
+    closeBtn.addEventListener("click", () => {
+        container.removeChild(card);
+        noteList.removeChild(listItem);
+        cardCount--;
+    });
+
+    listItem.appendChild(noteText);
+    listItem.appendChild(deleteNoteBtn);
+    noteList.appendChild(listItem);
+
+    card.appendChild(closeBtn);
+    makeDraggable(card);
+    container.appendChild(card);
+    cardCount++;
+});
